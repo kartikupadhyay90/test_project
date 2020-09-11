@@ -95,6 +95,14 @@ RSpec.describe Robot do
     end
   end
 
+  context 'when placing robot on a invalid grid' do
+    describe '#place' do
+      it 'should raise error' do
+        expect { robot.place('0, 6, north') }.to raise_error(PositionError)
+      end
+    end
+  end
+
   def validate_position_and_direction(command, direction_x, direction_y, facing, args = '')
     expect {
       command == 'place' ? robot.send(command, args) : robot.send(command)
