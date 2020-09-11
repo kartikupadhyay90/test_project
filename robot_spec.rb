@@ -33,12 +33,29 @@ RSpec.describe Robot do
       end
     end
 
+    describe '#left' do
+      it 'should turn left on same position' do
+        expect { robot.left }.to output("Robot currently placed at 0, 0 facing south direction\n").to_stdout
+      end
+    end
+
+    describe '#right' do
+      it 'should turn right on same position' do
+        expect { robot.right }.to output("Robot currently placed at 0, 0 facing north direction\n").to_stdout
+      end
+    end
+
+    describe '#report' do
+      it 'should report without any movement' do
+        expect { robot.report }.to output("Robot currently placed at 0, 0 facing east direction\n").to_stdout
+      end
+    end
+
     describe '#place' do
       it 'should place the robot' do
         expect { robot.place('0, 4, west') }.to output("Robot currently placed at 0, 4 facing west direction\n").to_stdout
       end
     end
-
   end
 
 end
