@@ -9,6 +9,7 @@ RSpec.describe Robot do
   let (:facing) { Robot::DIRECTIONS.first }
 
   before { allow($stdout).to receive(:write) }
+
   context 'when robot is not placed' do
     ['move', 'left', 'right', 'report'].each do |command|
       describe "# #{command}" do
@@ -59,7 +60,27 @@ RSpec.describe Robot do
         direction_x = 1
         direction_y = 2
         facing = 'north'
-        validate_position_and_direction("place", direction_x, direction_y, facing, "#{direction_x}, #{direction_y}, #{facing}")
+        validate_position_and_direction('place', direction_x, direction_y, facing, "#{direction_x}, #{direction_y}, #{facing}")
+      end
+    end
+  end
+
+  context 'when robot is placed on edge Ignore moves for invalid directions' do
+    describe '#is_not_valid_move?' do
+      corners = [ '0, 0, south',
+                  '0, 0, west',
+                  '4, 0, north',
+                  '4, 0, west',
+                  '0, 4, south',
+                  '0, 4, east',
+                  '4, 4, north',
+                  '4, 4, east'
+                ]
+      corners.each do |corner|
+        it 'should ignore move when on #{corner}' do
+          robot.place('0, 0, south')
+          expect(robot.is_not_valid_move?).to be_truthy
+        end
       end
     end
   end
