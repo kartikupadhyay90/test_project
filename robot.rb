@@ -1,5 +1,4 @@
 require 'byebug'
-require 'matrix'
 
 class ToySimulatorError < StandardError
 end
@@ -119,9 +118,3 @@ class Robot
     getCommand
   end
 end
-
-# puts 'Enter your board size'
-
-# robot = Robot.new(5)
-
-# robot.start_game
