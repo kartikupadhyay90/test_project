@@ -1,3 +1,4 @@
+require 'byebug'
 require 'matrix'
 
 class ToySimulatorError < StandardError
@@ -24,9 +25,11 @@ end
 class Robot
   DIRECTIONS = %w[south west north east].freeze
 
-  def initialize(size)
+  def initialize(size, i = 0, j = 0, facing = DIRECTIONS.first)
     @board_size = size
-    @board = Matrix.build(size)
+    @current_postion_i = i
+    @current_postion_j = j
+    @facing = facing
     @is_placed = false
   end
 
@@ -57,7 +60,6 @@ class Robot
       @current_postion_i += 1
     end
     report
-    getCommand
   end
 
   def right
@@ -67,7 +69,6 @@ class Robot
     direction_index -= 1
     @facing = DIRECTIONS[(direction_index == -1 ? 3 : direction_index)]
     report
-    getCommand
   end
 
   def left
@@ -81,9 +82,7 @@ class Robot
 
   def report
     raise PlaceError unless @is_placed
-
     puts "Robot currently placed at #{@current_postion_i}, #{@current_postion_j} facing #{@facing} direction"
-    getCommand
   end
 
   def place(args_string)
@@ -97,8 +96,7 @@ class Robot
     @facing = @facing && DIRECTIONS.include?(@facing&.strip&.downcase) ? @facing&.strip&.downcase : DIRECTIONS.first
     @is_placed = true
 
-    puts "Robot placed at #{@current_postion_i}, #{@current_postion_j}, #{@facing}"
-    getCommand
+    report
   end
 
   def getCommand
@@ -114,6 +112,7 @@ class Robot
     else
       puts 'You better enter a valid command'
     end
+    getCommand
   rescue ToySimulatorError => e
     puts e.message
     report if e.instance_of?(CommandIgnored)
@@ -121,8 +120,8 @@ class Robot
   end
 end
 
-puts 'Enter your board size'
+# puts 'Enter your board size'
 
-robot = Robot.new(gets.chomp.to_i)
+# robot = Robot.new(5)
 
-robot.start_game
+# robot.start_game
