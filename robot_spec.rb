@@ -2,6 +2,15 @@ require 'stringio'
 require './robot'
 
 RSpec.describe Robot do
+  CORNERS = [ '0, 0, south',
+                  '0, 0, west',
+                  '4, 0, north',
+                  '4, 0, west',
+                  '0, 4, south',
+                  '0, 4, east',
+                  '4, 4, north',
+                  '4, 4, east'
+                ]
 
   let (:robot) { described_class.new(5) }
   let (:direction_x) { 2 }
@@ -66,20 +75,21 @@ RSpec.describe Robot do
   end
 
   context 'when robot is placed on edge Ignore moves for invalid directions' do
+
     describe '#is_not_valid_move?' do
-      corners = [ '0, 0, south',
-                  '0, 0, west',
-                  '4, 0, north',
-                  '4, 0, west',
-                  '0, 4, south',
-                  '0, 4, east',
-                  '4, 4, north',
-                  '4, 4, east'
-                ]
-      corners.each do |corner|
-        it 'should ignore move when on #{corner}' do
-          robot.place('0, 0, south')
+      CORNERS.each do |corner|
+        it 'should be falsey when on #{corner}' do
+          robot.place(corner)
           expect(robot.is_not_valid_move?).to be_truthy
+        end
+      end
+    end
+
+    describe "should Ignore move" do
+      CORNERS.each do |corner|
+        it 'should ignore move when on #{corner}' do
+          robot.place(corner)
+          expect { robot.move }.to raise_error(CommandIgnored)
         end
       end
     end
